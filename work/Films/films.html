@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="nl">
+
+<head>
+    <title>Films</title>
+    <link rel="icon" href="films.ico" type="image/x-icon">
+    <link rel="stylesheet" href="films.css">
+</head>
+
+<body>
+    <h1 id="titel"></h1>
+    <h2>Beschrijving:</h2>
+    <div id="beschrijving"></div>
+    <h2>Cast:</h2>
+    <ul id="cast">        
+    </ul>
+    <h2>Foto:</h2>
+    <img id="foto">
+    <h2>Genres:</h2>
+    <ul id="genres">        
+    </ul>
+    <h2>Rating:</h2>
+    <div id="rating"></div>
+    <h2>Regisseurs:</h2>
+    <ul id="regisseurs"></ul>
+    <div>
+        <button id="vorige" disabled>Vorige</button>
+        <button id="volgende" disabled>Volgende</button>
+    </div>
+    <div id="nietGevonden" hidden class="fout">Films niet gevonden.</div>
+
+</body>
+
+<script>
+    let films;
+let index = 0;
+leesFilms();
+
+const vorigeButton = document.getElementById("vorige");
+vorigeButton.onclick = function () {
+    toonFilm(--index);
+    if (index === 0) {
+        this.disabled = true;
+    }
+    volgendeButton.disabled = false;
+};
+const volgendeButton = document.getElementById("volgende");
+volgendeButton.onclick = function () {
+    toonFilm(++index);
+    if (index === films.length - 1) {
+        this.disabled = true;
+    }
+    vorigeButton.disabled = false;
+};
+
+async function leesFilms() {
+    const response = await fetch("films.json");
+    const nietGevondenDiv = document.getElementById("nietGevonden");
+    if (response.ok) {
+        nietGevondenDiv.hidden = true;
+        films = await response.json();
+        if (films.length !== 0) {
+            toonFilm(index);
+            if (films.length > 1) {
+                volgendeButton.disabled = false;
+            }
+        }
+    } else {
+        nietGevondenDiv.hidden = false;
+    }
+}
+
+function toonFilm(index) {
+    const film = films[index];
+    document.getElementById("titel").innerText = film.titel;
+    document.getElementById("beschrijving").innerText = film.beschrijving;
+    toonCastVan(film);
+    toonAfbeeldingVan(film);
+    toonGenresVan(film);
+    toonRatingVan(film);
+    toonRegisseursVan(film);
+}
+
+function verwijderChildrenVan(element) {
+    while (element.lastChild != null) {
+        element.lastChild.remove();
+    }
+}
+
+function toonCastVan(film) {
+    const ul = document.getElementById("cast");
+    verwijderChildrenVan(ul);
+    for (const persoon of film.cast) {
+        const li = document.createElement("li");
+        li.innerText = persoon;
+        ul.appendChild(li);
+    }
+}
+
+function toonAfbeeldingVan(film) {
+    const fotoImg = document.getElementById("foto");
+    fotoImg.src = film.foto;
+    fotoImg.alt = film.titel;
+}
+
+function toonGenresVan(film) {
+    const ul = document.getElementById("genres");
+    verwijderChildrenVan(ul);
+    for (const genre of film.genres) {
+        const li = document.createElement("li");
+        li.innerText = genre;
+        ul.appendChild(li);
+    }
+}
+
+function toonRatingVan(film) {
+    const ratingDiv = document.getElementById("rating");
+    verwijderChildrenVan(ratingDiv);
+    for (let teller = 0; teller < film.rating; teller++) {
+        const img = document.createElement("img");
+        img.src = "ster.png";
+        img.alt = "ster";
+        ratingDiv.appendChild(img);
+    }
+}
+
+function toonRegisseursVan(film) {
+    const ul = document.getElementById("regisseurs");
+    verwijderChildrenVan(ul);
+    for (const regisseur of film.regisseurs) {
+        const li = document.createElement("li");
+        li.innerText = regisseur;
+        ul.appendChild(li);
+    }
+}
+</script>
+
+</html>

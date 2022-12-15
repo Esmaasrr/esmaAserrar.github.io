@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Blad Steen Schaar</title>
+    <link rel="stylesheet" href="bladsteenschaar.css">
+</head>
+
+<body>
+    <div class="main-title">
+    <h2>Rock <span class="me">Paper</span> Scissor<span class="bg-text">Play a game</span></h2></div>
+
+    <div class="container">
+    <h1>CHOOSE ONE</h1>
+    <div class="youanswer">
+    <img src="blad.png" alt="blad" id="blad">
+    <img src="steen.png" alt="steen" id="steen">
+    <img src="schaar.png" alt="schaar" id="schaar">
+</div>
+<h1 id="titelPC"></h1>
+    <div class="computeranswer">
+    <span id="computer"></span>
+</div>
+    <h1 id="titelWIN"></h1>
+    <span id="winnaar"></span>
+
+</div>
+</body>
+
+
+<script>
+    for (const optie of document.getElementsByTagName("img")) {
+        optie.onclick = function () {
+            document.getElementById("winnaar").innerText = "";
+            /**GEBRUIKER KIEST */
+            const gebruiker = optie;
+            console.log(gebruiker.id);
+    
+            /** COMPUTER KIEST */
+            const keuze = ['steen', 'schaar', 'blad'];
+            const comp = Math.floor((Math.random() * 3));
+            const pc = keuze[comp];
+            document.getElementById("titelPC").innerHTML = "COMPUTER"
+            console.log(pc);
+            const antwoord = document.createElement("img");
+            antwoord.src = `${pc}.png`;
+            if (document.getElementById("computer").firstChild) {
+                document.getElementById("computer").removeChild(document.getElementById("computer").firstChild);
+            }
+            document.getElementById("computer").appendChild(antwoord);
+    
+    
+            /** RESULTAAT */
+            document.getElementById("titelWIN").innerHTML = "WINNER"
+
+            if (gebruiker.id === pc) {
+                
+                document.getElementById("winnaar").innerText = "Draw";
+            } else {
+            if (gebruiker.id === steen && pc === schaar || gebruiker.id === blad && pc === steen || gebruiker.id === schaar && pc === blad) {
+                    document.getElementById("winnaar").innerText = "You won"
+                } else {
+                    document.getElementById("winnaar").innerText = "Computer won"
+                }
+            }
+
+            }
+        }
+    
+    </script>
+
+</html>

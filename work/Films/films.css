@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+div {
+    margin-bottom: 0.2em;
+}
+
+.fout {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
